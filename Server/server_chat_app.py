@@ -18,7 +18,8 @@ class App(customtkinter.CTk):
 #==============Initializing communication==============
 
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.host = socket.gethostname()
+        # self.host = socket.gethostname()
+        self.host = '0.0.0.0'
         self.port = 12345
         self.client = (self.host, self.port)
 
@@ -292,7 +293,11 @@ class App(customtkinter.CTk):
             if exe in exet:
                 img_fnd=0
                 print(exe)
-                self.rcvd_img = customtkinter.CTkImage(Image.open('./Recieved/'+name), size=(200,200) )
+                if key:
+                    f_name=self.file_path
+                else:
+                    f_name='./Recieved/'+ name
+                self.rcvd_img = customtkinter.CTkImage(Image.open(f_name), size=(200,200) )
                 self.msg_frm = customtkinter.CTkFrame(self.chat_area, corner_radius=10, fg_color='#006ca5', )
                 if key:
                     self.msg_frm.pack(side='top', anchor='e', pady=5)
@@ -310,6 +315,7 @@ class App(customtkinter.CTk):
             self.send_sms_txt(file_message=msg1)
 
     def get_filename(self, folder):
+        self.file_path = folder
         self.temp_filename = folder.split("/")
         self.temp_filename = self.temp_filename[-1]
         return self.temp_filename
@@ -334,18 +340,7 @@ class App(customtkinter.CTk):
                 # print(size)
             self.real_server.send(("File_received").encode())
             self.received_message = None
-        #     dt = datetime.now()
-        #     time = dt.strftime( "%d/%m/%Y, %I:%M %p")
-        # ret = self.extension_file(name)
-        # if ret:
-        #     recv = f'{name} file received.'+'\n\n'+time
-        #     self.dp_msg = customtkinter.CTkLabel(self.msg_frm,text='',image=self.user_1 ,)
-        #     self.dp_msg.pack(side='left',padx=5, pady=5)
-        #     self.msg_write = customtkinter.CTkLabel(self.msg_frm,text=recv, text_color='black',font=('hevetica',15),
-        #                                             justify='left',)
-        #     self.msg_write.pack(side='left',fill='both',expand=True, padx=10, pady=10)
-        # else:
-        #     pass
+
     def receive_sms_txt(self, receive_txt=None):
         self.msg_frm = customtkinter.CTkFrame(self.chat_area, corner_radius=10, fg_color='#006ca5', )
         print("Receiving sms again")
